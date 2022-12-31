@@ -95,12 +95,6 @@ public class Main {
             int endY = (int) (dimension.height * 0.2);
             int startX = dimension.width / 2;
             actions.press(PointOption.point(startX, startY)).moveTo(PointOption.point(startX, endY)).release().perform();
-
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
         }
     }
 
