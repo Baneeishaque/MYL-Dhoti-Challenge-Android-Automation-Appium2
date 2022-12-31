@@ -64,7 +64,7 @@ public class Main {
 
             scrollToLoadMore(androidDriver);
 
-            dataRecords.forEach((webElement -> System.out.println(webElement.getAttribute("content-desc"))));
+            printDataRecords();
 
             androidDriver.quit();
 
@@ -74,9 +74,14 @@ public class Main {
         }
     }
 
+    private static void printDataRecords() {
+        dataRecords.forEach((webElement -> System.out.println(webElement.getAttribute("content-desc"))));
+    }
+
     private static void processListContents(WebElement scrollView) {
 
-        dataRecords.addAll(scrollView.findElement(By.xpath("//android.view.View[//android.view.View]")).findElements(By.className("android.widget.ImageView")));
+        dataRecords.addAll(scrollView.findElements(By.className("android.widget.ImageView")));
+//        printDataRecords();
     }
 
     private static void scrollToLoadMore(AndroidDriver androidDriver) {
@@ -85,12 +90,12 @@ public class Main {
         do {
             try {
 
-                WebElement scrollView = androidDriver.findElement(By.className("android.widget.ScrollView"));
+                WebElement scrollView = androidDriver.findElement(By.xpath("//android.view.View[@content-desc='S.No']/parent::node()"));
                 processListContents(scrollView);
 
             } catch (NoSuchElementException noSuchElementException) {
 
-                WebElement scrollView = androidDriver.findElement(By.xpath("//android.view.View[@content-desc='S.No']/parent::node()"));
+                WebElement scrollView = androidDriver.findElement(By.className("android.widget.ScrollView"));
                 processListContents(scrollView);
             }
 
