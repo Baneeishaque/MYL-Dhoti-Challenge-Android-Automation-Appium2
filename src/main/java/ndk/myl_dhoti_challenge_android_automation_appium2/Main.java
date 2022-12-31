@@ -20,7 +20,7 @@ public class Main {
 
     public static final String DISTRICT_NAME = "MALAPPURAM";
     public static final String PANCHAYATH_NAME = "Tanalur";
-    public static final String WARD_NAME = "MOOCHIKKAL";
+    public static final String WARD_NAME = "KERALADEESWARAPURAM";
     public static final int FLUTTER_ENGINE_REDRAW_TIME = 5;
     public static final By loadMoreLocator = By.xpath("//android.widget.Button[@content-desc='Load More']");
     public static final int API_RESPONSE_WAITING_TIME_IN_SECONDS = 15;
@@ -61,7 +61,7 @@ public class Main {
 
             try {
 
-                WebElement scrollView = androidDriver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.ScrollView"));
+                WebElement scrollView = androidDriver.findElement(By.className("android.widget.ScrollView"));
                 processListContents(scrollView);
 
             } catch (NoSuchElementException noSuchElementException) {
