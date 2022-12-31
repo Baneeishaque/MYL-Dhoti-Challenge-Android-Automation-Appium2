@@ -1,5 +1,8 @@
 package ndk.myl_dhoti_challenge_android_automation_appium2;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
+import com.opencsv.CSVWriter;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.offset.PointOption;
@@ -7,6 +10,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,6 +30,7 @@ public class Main {
 //    public static final String[] WARD_NAMES = {"KERALADEESWARAPURAM", "PUTHANTHERU"};
 //    public static final String[] WARD_NAMES = {"PUTHANTHERU"};
     public static final String[] WARD_NAMES = {"PANDIYATT"};
+//    public static final String[] WARD_NAMES = {"MOOCHIKKAL"};
 
     public static final int FLUTTER_ENGINE_REDRAW_TIME = 8;
     public static final By loadMoreLocator = By.xpath("//android.widget.Button[@content-desc='Load More']");
@@ -64,7 +71,7 @@ public class Main {
 
             scrollToLoadMore(androidDriver);
 
-            printDataRecords();
+            printDataRecords(wardName);
 
             androidDriver.quit();
 
@@ -74,8 +81,33 @@ public class Main {
         }
     }
 
-    private static void printDataRecords() {
-        dataRecords.forEach((webElement -> System.out.println(webElement.getAttribute("content-desc"))));
+    private static void printDataRecords(String wardName) {
+
+        File file = new File(UCharacter.toTitleCase(DISTRICT_NAME.toLowerCase(), BreakIterator.getWordInstance()) + "_" + UCharacter.toTitleCase(PANCHAYATH_NAME.toLowerCase(), BreakIterator.getWordInstance()) + "_" + UCharacter.toTitleCase(wardName.toLowerCase(), BreakIterator.getWordInstance()) + ".csv");
+
+        String[] header = {"Sl. No.", "Name", "Transaction Number", "Ward Name", "Panchayath Name", "District Name", "Date", "Time", "Amount", "Count"};
+
+        try {
+
+            FileWriter outputFile = new FileWriter(file);
+            CSVWriter writer = new CSVWriter(outputFile);
+
+            writer.writeNext(header);
+
+            dataRecords.forEach((webElement -> {
+
+                String[] transactionData = webElement.getAttribute("content-desc").split("\\R");
+                String[] transactionDataPlaces = transactionData[3].split(",");
+                String[] transactionTimeStamp = transactionData[5].split(",");
+
+                writer.writeNext(new String[]{transactionData[0], transactionData[1], transactionData[2], transactionDataPlaces[0], transactionDataPlaces[1], transactionData[4], transactionTimeStamp[0], transactionTimeStamp[1].trim(), transactionData[6].substring(2), transactionData[7]});
+            }));
+
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
     }
 
     private static void processListContents(WebElement scrollView) {
