@@ -14,22 +14,26 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Main {
 
     public static final String DISTRICT_NAME = "MALAPPURAM";
     public static final String PANCHAYATH_NAME = "Tanalur";
-    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU"};
-    public static final int FLUTTER_ENGINE_REDRAW_TIME = 5;
+    //    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU"};
+//    public static final String[] WARD_NAMES = {"KERALADEESWARAPURAM", "PUTHANTHERU"};
+    public static final String[] WARD_NAMES = {"PUTHANTHERU"};
+
+    public static final int FLUTTER_ENGINE_REDRAW_TIME = 8;
     public static final By loadMoreLocator = By.xpath("//android.widget.Button[@content-desc='Load More']");
     public static final int API_RESPONSE_WAITING_TIME_IN_SECONDS = 15;
-    public static List<WebElement> dataRecords = new ArrayList<>();
+    public static Set<WebElement> dataRecords;
 
     public static void main(String[] args) {
 
         for (String wardName : WARD_NAMES) {
+            dataRecords = new LinkedHashSet<>();
             processWardName(wardName);
         }
     }
@@ -61,6 +65,8 @@ public class Main {
             scrollToLoadMore(androidDriver);
 
             dataRecords.forEach((webElement -> System.out.println(webElement.getAttribute("content-desc"))));
+
+            androidDriver.quit();
 
         } catch (MalformedURLException | URISyntaxException e) {
 
@@ -95,7 +101,7 @@ public class Main {
             } catch (NoSuchElementException noSuchElementException) {
 
                 try {
-                    androidDriver.findElements(By.xpath("//android.view.View[@content-desc='No More Payments']"));
+                    androidDriver.findElement(By.xpath("//android.view.View[@content-desc='No More Payments']"));
                     break;
 
                 } catch (NoSuchElementException noSuchElementException1) {
