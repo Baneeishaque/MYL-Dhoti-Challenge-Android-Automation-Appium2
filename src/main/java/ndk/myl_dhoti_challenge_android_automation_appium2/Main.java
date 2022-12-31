@@ -3,10 +3,7 @@ package ndk.myl_dhoti_challenge_android_automation_appium2;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.offset.PointOption;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -21,13 +18,16 @@ public class Main {
 
     public static final String DISTRICT_NAME = "MALAPPURAM";
     public static final String PANCHAYATH_NAME = "Tanalur";
-    //    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU"};
+
+    //    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU", "PANDIYATT"};
+//    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU"};
 //    public static final String[] WARD_NAMES = {"KERALADEESWARAPURAM", "PUTHANTHERU"};
-    public static final String[] WARD_NAMES = {"PUTHANTHERU"};
+//    public static final String[] WARD_NAMES = {"PUTHANTHERU"};
+    public static final String[] WARD_NAMES = {"PANDIYATT"};
 
     public static final int FLUTTER_ENGINE_REDRAW_TIME = 8;
     public static final By loadMoreLocator = By.xpath("//android.widget.Button[@content-desc='Load More']");
-    public static final int API_RESPONSE_WAITING_TIME_IN_SECONDS = 15;
+    public static final int API_RESPONSE_WAITING_TIME_IN_SECONDS = 5;
     public static Set<WebElement> dataRecords;
 
     public static void main(String[] args) {
@@ -139,7 +139,7 @@ public class Main {
             element.sendKeys(desiredText);
             remoteWebDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(FLUTTER_ENGINE_REDRAW_TIME));
             remoteWebDriver.findElement(By.xpath("//android.view.View[@content-desc='" + desiredText + "']")).click();
-        } catch (NoSuchElementException noSuchElementException) {
+        } catch (NoSuchElementException | StaleElementReferenceException noSuchElementException) {
             findElement(remoteWebDriver, desiredText, element);
         }
     }
