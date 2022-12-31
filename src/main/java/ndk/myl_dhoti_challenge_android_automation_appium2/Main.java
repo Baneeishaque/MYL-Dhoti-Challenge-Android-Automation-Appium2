@@ -6,6 +6,7 @@ import com.opencsv.CSVWriter;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.offset.PointOption;
+import ndk.Constants;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -22,15 +23,6 @@ import java.util.Set;
 
 public class Main {
 
-    public static final String DISTRICT_NAME = "MALAPPURAM";
-    public static final String PANCHAYATH_NAME = "Tanalur";
-
-    //    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU", "PANDIYATT"};
-//    public static final String[] WARD_NAMES = {"MOOCHIKKAL", "KERALADEESWARAPURAM", "PUTHANTHERU"};
-//    public static final String[] WARD_NAMES = {"KERALADEESWARAPURAM", "PUTHANTHERU"};
-//    public static final String[] WARD_NAMES = {"PUTHANTHERU"};
-    public static final String[] WARD_NAMES = {"PANDIYATT"};
-//    public static final String[] WARD_NAMES = {"MOOCHIKKAL"};
 
     public static final int FLUTTER_ENGINE_REDRAW_TIME = 8;
     public static final By loadMoreLocator = By.xpath("//android.widget.Button[@content-desc='Load More']");
@@ -39,7 +31,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        for (String wardName : WARD_NAMES) {
+        for (String wardName : Constants.WARD_NAMES) {
             dataRecords = new LinkedHashSet<>();
             processWardName(wardName);
         }
@@ -61,8 +53,8 @@ public class Main {
             AndroidDriver androidDriver = new AndroidDriver(new URI("http://127.0.0.1:4723/").toURL(), desiredCapabilities);
             androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(12));
             androidDriver.findElement(By.xpath("//android.widget.ImageView[@content-desc='Report']")).click();
-            performSearch(androidDriver, API_RESPONSE_WAITING_TIME_IN_SECONDS, "//android.widget.EditText[@text='Select District']", DISTRICT_NAME);
-            performSearch(androidDriver, FLUTTER_ENGINE_REDRAW_TIME, "//android.widget.EditText[@text='Select Panjayth/Municipality']", PANCHAYATH_NAME);
+            performSearch(androidDriver, API_RESPONSE_WAITING_TIME_IN_SECONDS, "//android.widget.EditText[@text='Select District']", Constants.DISTRICT_NAME);
+            performSearch(androidDriver, FLUTTER_ENGINE_REDRAW_TIME, "//android.widget.EditText[@text='Select Panjayth/Municipality']", Constants.PANCHAYATH_NAME);
             performSearch(androidDriver, FLUTTER_ENGINE_REDRAW_TIME, "//android.widget.EditText[@text='Select Unit/Ward']", wardName);
             androidDriver.findElement(By.xpath("//android.widget.ImageView[starts-with(@content-desc,'" + wardName + "')]")).click();
             androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(FLUTTER_ENGINE_REDRAW_TIME));
@@ -83,7 +75,7 @@ public class Main {
 
     private static void printDataRecords(String wardName) {
 
-        File file = new File(UCharacter.toTitleCase(DISTRICT_NAME.toLowerCase(), BreakIterator.getWordInstance()) + "_" + UCharacter.toTitleCase(PANCHAYATH_NAME.toLowerCase(), BreakIterator.getWordInstance()) + "_" + UCharacter.toTitleCase(wardName.toLowerCase(), BreakIterator.getWordInstance()) + ".csv");
+        File file = new File(UCharacter.toTitleCase(Constants.DISTRICT_NAME.toLowerCase(), BreakIterator.getWordInstance()) + "_" + UCharacter.toTitleCase(Constants.PANCHAYATH_NAME.toLowerCase(), BreakIterator.getWordInstance()) + "_" + UCharacter.toTitleCase(wardName.toLowerCase(), BreakIterator.getWordInstance()) + ".csv");
 
         String[] header = {"Sl. No.", "Name", "Transaction Number", "Ward Name", "Panchayath Name", "District Name", "Date", "Time", "Amount", "Count"};
 
